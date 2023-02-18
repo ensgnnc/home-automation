@@ -38,6 +38,7 @@ export default function Home({ room }) {
         <div className={styles.grid}>
           {room.map((_room) => (
             <RoomComponent
+              key={_room.id}
               roomName={_room.roomName}
               roomID={_room.id}
             ></RoomComponent>

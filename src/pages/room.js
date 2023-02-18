@@ -51,6 +51,7 @@ export default function Room({ room, _items }) {
           <div className={styles.grid}>
             {_items.map((item) => (
               <SwitchComponent
+                key={item.id}
                 currentState={item.currentState}
                 itemID={item.itemName}
               ></SwitchComponent>
