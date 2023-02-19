@@ -1,19 +1,14 @@
 import Head from "next/head";
 import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
-import Link from "next/link";
 import RoomComponent from "@/components/RoomComponent";
-import clientPromise from "lib/mongodb";
+import { getRoom } from "lib/db_handler";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export async function getServerSideProps(context) {
   try {
-    const client = await clientPromise;
-
-    const db = client.db("home-automation");
-
-    const room = await db.collection("rooms").find({}).toArray();
+    const room = JSON.parse(JSON.stringify(await getRoom()));
 
     return {
       props: {

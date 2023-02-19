@@ -1,32 +1,23 @@
 import Head from "next/head";
 import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
-import { useRouter } from "next/router";
 import SwitchComponent from "@/components/SwitchComponent";
-import clientPromise from "lib/mongodb";
+import { getItems, getRoom } from "lib/db_handler";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export async function getServerSideProps(context) {
   try {
-    const client = await clientPromise;
-
-    const db = client.db("home-automation");
-
     const id = parseInt(context.query.id);
 
-    const room = await db.collection("rooms").find({ id: id }).toArray();
+    const room = JSON.parse(JSON.stringify(await getRoom(id)));
 
-    const items = await db
-      .collection("items")
-      .find({ roomID: id })
-      .sort({ id: 1 })
-      .toArray();
+    const items = JSON.parse(JSON.stringify(await getItems(id)));
 
     return {
       props: {
-        _items: JSON.parse(JSON.stringify(items)),
-        room: JSON.parse(JSON.stringify(room)),
+        items: items,
+        room: room,
       },
     };
   } catch (e) {
@@ -34,7 +25,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default function Room({ room, _items }) {
+export default function Room({ room, items }) {
   return (
     <>
       <Head>
@@ -49,7 +40,7 @@ export default function Room({ room, _items }) {
             {room[0].roomName}
           </h2>
           <div className={styles.grid}>
-            {_items.map((item) => (
+            {items.map((item) => (
               <SwitchComponent
                 key={item.id}
                 currentState={item.currentState}
