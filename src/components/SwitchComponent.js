@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ["latin"] });
 function SwitchComponent({ currentState, itemID }) {
   return (
     <div className={styles.ItemCard}>
-      <h2 className={inter.className}>{itemID}</h2>
+      <h2 className={styles.cardText}>{itemID}</h2>
       <label className={styles.switch}>
         <input
           type={"checkbox"}

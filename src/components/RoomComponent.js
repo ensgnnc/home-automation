@@ -10,9 +10,7 @@ function RoomComponent({ roomName, roomID }) {
       className={styles.card}
       rel="noopener noreferrer"
     >
-      <h2 className={inter.className}>
-        {roomName} <span>-&gt;</span>
-      </h2>
+      <h2 className={styles.cardText}>{roomName}</h2>
     </Link>
   );
 }
