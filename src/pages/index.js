@@ -2,21 +2,25 @@ import Head from "next/head";
 import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
 import RoomComponent from "@/components/RoomComponent";
-import { getRoom } from "lib/db_handler";
+import { PrismaClient } from "@prisma/client";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export async function getServerSideProps(context) {
+  const prisma = new PrismaClient();
+
+  const id = parseInt(context.query.id);
+
   try {
-    const room = JSON.parse(JSON.stringify(await getRoom()));
+    const room = await prisma.room.findMany();
 
     return {
       props: {
-        room: JSON.parse(JSON.stringify(room)),
+        room: room,
       },
     };
   } catch (e) {
-    return console.log(e);
+    console.log(e);
   }
 }
 
@@ -34,7 +38,7 @@ export default function Home({ room }) {
           {room.map((_room) => (
             <RoomComponent
               key={_room.id}
-              roomName={_room.roomName}
+              roomName={_room.name}
               roomID={_room.id}
             ></RoomComponent>
           ))}
